@@ -71,4 +71,11 @@ public class EmpController {
             return Result.error("查询失败：" + e.getMessage());
         }
     }
+
+    @PutMapping
+    public Result update(@RequestBody Emp emp){
+        log.info("修改员工信息, {}", emp);
+        empService.update(emp);
+        return Result.success();
+    }
 }

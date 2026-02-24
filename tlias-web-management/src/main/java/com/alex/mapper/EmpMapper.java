@@ -2,12 +2,10 @@ package com.alex.mapper;
 
 import com.alex.pojo.Emp;
 import com.alex.pojo.EmpQueryParam;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface EmpMapper {
@@ -35,4 +33,12 @@ public interface EmpMapper {
     void deleteById(List<Integer> ids);
 
     Emp getById(Integer id);
+
+    void updateById(Emp emp);
+
+    @MapKey("pos")
+    List<Map<String,Object>> countEmpJobData();
+
+    @MapKey("name")
+    List<Map> countEmpGenderData();
 }

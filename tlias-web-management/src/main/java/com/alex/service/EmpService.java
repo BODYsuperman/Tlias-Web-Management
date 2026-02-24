@@ -16,6 +16,8 @@ public interface EmpService {
 
     Emp getInfo(Integer id);
 
+    void update(Emp emp);
+
     /**
      * 分页查询
      * @param page 页码
