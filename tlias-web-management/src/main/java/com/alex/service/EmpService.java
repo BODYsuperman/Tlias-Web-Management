@@ -3,6 +3,7 @@ package com.alex.service;
 
 import com.alex.pojo.Emp;
 import com.alex.pojo.EmpQueryParam;
+import com.alex.pojo.LoginInfo;
 import com.alex.pojo.PageResult;
 
 import java.util.List;
@@ -17,6 +18,8 @@ public interface EmpService {
     Emp getInfo(Integer id);
 
     void update(Emp emp);
+
+    LoginInfo login(Emp emp);
 
     /**
      * 分页查询
