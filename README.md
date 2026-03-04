@@ -19,24 +19,24 @@ tags:
   - [1.2 Project Architecture](#project-architecture)
   - [1.3 Project Structure Overview](#project-structure-overview)
   - [1.4 Database Design](#database-design)
-  [2. Environment Setup: The Hardest Part](#2-environment-setup-the-hardest-part)
+- [2. Environment Setup: The Hardest Part](#2-environment-setup-the-hardest-part)
   - [2.1 Key Insight](#key-insight)
   - [2.2 Unified Response Class](#unified-response-class)
-  [3. Department Management](#3-department-management-first-crud-experience)
-  [4. Employee Management: Pagination & Dynamic SQL](#4-employee-management-pagination--dynamic-sql)
+- [3. Department Management](#3-department-management-first-crud-experience)
+- [4. Employee Management: Pagination & Dynamic SQL](#4-employee-management-pagination--dynamic-sql)
   - [4.1 Pagination Query (Basic Version)](#pagination-query-basic-version)
   - [4.2 Using PageHelper Plugin (Recommended) – Deep Dive](#using-pagehelper-plugin-recommended--deep-dive)
   - [4.3 Conditional Pagination Query (Dynamic SQL) – Advanced Details](#conditional-pagination-query-dynamic-sql--advanced-details)
   - [4.4 Batch Delete Employees – ForEach in XML](#batch-delete-employees--foreach-in-xml)
   - [4.5 Add Employee](#add-employee)
 <!--more-->
-  [5. File Upload: From Local to Cloud](#5-file-upload-from-local-to-cloud)
-  [6. Login Authentication: JWT Tokens & Interceptors](#6-login-authentication-jwt-tokens--interceptors)
-  [7. Unified Exception Handling: Graceful Error Management](#7-unified-exception-handling-graceful-error-management)
-  [8. Transaction Management: Ensuring Data Consistency](#8-transaction-management-ensuring-data-consistency)
-  [9. AOP in Action: Operation Logging](#9-aop-in-action-operation-logging)
-  [10. Pitfall Diary: Bugs I Encountered](#10-pitfall-diary-bugs-i-encountered)
-  [11. Advanced: Statistics & Complex Queries](#11-advanced-statistics--complex-queries)
+- [5. File Upload: From Local to Cloud](#5-file-upload-from-local-to-cloud)
+- [6. Login Authentication: JWT Tokens & Interceptors](#6-login-authentication-jwt-tokens--interceptors)
+- [7. Unified Exception Handling: Graceful Error Management](#7-unified-exception-handling-graceful-error-management)
+- [8. Transaction Management: Ensuring Data Consistency](#8-transaction-management-ensuring-data-consistency)
+- [9. AOP in Action: Operation Logging](#9-aop-in-action-operation-logging)
+- [10. Pitfall Diary: Bugs I Encountered](#10-pitfall-diary-bugs-i-encountered)
+- [11. Advanced: Statistics & Complex Queries](#11-advanced-statistics--complex-queries)
   - [11.1 Understanding List<Map<String, Object>> in MyBatis](#understanding-listmapstring-object-in-mybatis)
   - [11.2 Using CASE WHEN in SQL for Conditional Aggregation](#using-case-when-in-sql-for-conditional-aggregation)
   - [11.3 Handling Date Formats in Query Results](#handling-date-formats-in-query-results)
@@ -44,8 +44,8 @@ tags:
   - [11.5 Using foreach for Dynamic IN Clauses in Statistics](#using-foreach-for-dynamic-in-clauses-in-statistics)
   - [11.6 LocalDate Comparison in Java (if needed)](#localdate-comparison-in-java-if-needed)
   - [11.7 Complete Example: Employee Trend by Month](#complete-example-employee-trend-by-month)
-  [12. Some Thoughts](#thoughts)
-  [13. Git Repo link:Tlias-Web-Management](#git)
+- [12. Some Thoughts](#thoughts)
+- [13. Git Repo link:Tlias-Web-Management](#git)
 
 ## Project Overview: What is Tlias? <a name="1-project-overview-what-is-tlias"></a>
 
@@ -85,7 +85,7 @@ MySQL
 
 ```
 tlias/
-├── src/main/java/com/itheima/
+├── src/main/java/com/alex/
 │ ├── controller/ # Controller layer, handles requests
 │ ├── service/ # Service layer, business logic
 │ │ ├── impl/ # Service implementations
@@ -842,7 +842,7 @@ Emp getByUsernameAndPassword(String username, String password);
 ```
 
 Login Validation - Filter Approach
-java
+```java
 @Slf4j
 @WebFilter(urlPatterns = "/\*")
 public class LoginCheckFilter implements Filter {
@@ -877,19 +877,19 @@ public class LoginCheckFilter implements Filter {
     }
 
 }
+```
 
-````
 Enable filter scanning on main class:
 
 ```java
 @ServletComponentScan
 @SpringBootApplication
 public class TliasApplication { ... }
-````
+```
 
 Login Validation - Interceptor Approach
 Interceptor:
-
+```java
 @Slf4j
 @Component
 public class LoginCheckInterceptor implements HandlerInterceptor {
@@ -922,8 +922,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
     }
 
 }
-
-````
+```
 Register Interceptor:
 
 ```java
@@ -940,7 +939,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/login");
     }
 }
-````
+```
 
 ## Unified Exception Handling: Graceful Error Management <a name="7-unified-exception-handling-graceful-error-management"></a>
 
@@ -1381,4 +1380,3 @@ This returns data that can be directly used by chart libraries.
 ## Git Repo link<a name="git"></a>
 
 [Tlias-Web-Management](https://github.com/BODYsuperman/Tlias-Web-Management)
-
