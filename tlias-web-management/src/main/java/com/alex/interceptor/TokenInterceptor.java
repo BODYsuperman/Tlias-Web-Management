@@ -1,6 +1,8 @@
 package com.alex.interceptor;
 
+import com.alex.util.CurrentHolder;
 import com.alex.util.JwtUtils;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
 
 @Slf4j
 @Component
@@ -32,7 +35,13 @@ public class TokenInterceptor implements HandlerInterceptor {
         }
 
         try {
-            JwtUtils.parseJWT(token);
+            //JwtUtils.parseJWT(token);
+
+            Claims claims = JwtUtils.parseJWT(token);
+            Integer empId = Integer.valueOf(claims.get("id").toString());
+            CurrentHolder.setCurrentId(empId);
+
+            log.info("token解析成功, 放行");
         } catch (Exception e) {
             e.printStackTrace();
             log.info("解析令牌失败, 返回错误结果");
@@ -42,6 +51,7 @@ public class TokenInterceptor implements HandlerInterceptor {
 
         //6. 放行。
         log.info("令牌合法, 放行");
+
         return  true;
     }
 
@@ -53,5 +63,6 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
         log.info("afterCompletion ... ");
+        CurrentHolder.remove();   // ✅ 请求结束再 remove
     }
 }

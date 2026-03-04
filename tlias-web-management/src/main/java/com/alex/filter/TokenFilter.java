@@ -1,6 +1,8 @@
 package com.alex.filter;
 
+import com.alex.util.CurrentHolder;
 import com.alex.util.JwtUtils;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServlet;
@@ -13,44 +15,44 @@ import org.springframework.util.StringUtils;
 import java.io.IOException;
 
 
+@WebFilter(urlPatterns = "/*")
 @Slf4j
-//@WebFilter(urlPatterns = "/*")//block all request paths
-public class TokenFilter implements Filter {
+public class TokenFilter implements Filter{
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-
-
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        String url = request.getRequestURL().toString();
 
-        if(url.contains("login")){
-            log.info("login request , directly allowing access");
-            filterChain.doFilter(request, response);
+        String requestURI = request.getRequestURI();
+
+        if ( requestURI.equals("/login") ) {
+            log.info("登录入口，放行" );
+            filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
 
         String token = request.getHeader("token");
-        if(!StringUtils.hasLength(token)){
-            log.info("jwt token is null, return error");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
 
-        }
-
-        try {
-            JwtUtils.parseJWT(token);
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.info("解析令牌失败, 返回错误结果");
+        if ( token == null || token.isEmpty()){
+            log.info("令牌为空，响应401");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
-        //6. 放行。
-        log.info("令牌合法, 放行");
-        filterChain.doFilter(request , response);
+        try{
+            Claims claims = JwtUtils.parseJWT(token);
+            Integer Empid = Integer.valueOf(claims.get("id").toString());
+            CurrentHolder.setCurrentId(Empid);
+            log.info("当前登录员工id：{}",Empid);
+        } catch(Exception e){
+            log.info("令牌非法，响应401");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
 
+        log.info("令牌合法，放行");
+        filterChain.doFilter(request, response);
 
+        CurrentHolder.remove();
     }
 }

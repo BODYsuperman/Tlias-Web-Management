@@ -1,5 +1,6 @@
 package com.alex.service.impl;
 
+import com.alex.anno.LogOperation;
 import com.alex.mapper.DeptMapper;
 import com.alex.pojo.Dept;
 import com.alex.service.DeptService;
@@ -15,6 +16,8 @@ public class DeptServiceImpl implements DeptService {
 
     @Autowired
     private DeptMapper deptMapper;
+
+
     @Override
     public List<Dept> findAll() {
         return deptMapper.findAll();

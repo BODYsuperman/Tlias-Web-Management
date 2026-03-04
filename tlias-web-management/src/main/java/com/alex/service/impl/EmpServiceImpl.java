@@ -79,7 +79,7 @@ public class EmpServiceImpl implements EmpService {
             emp.setUpdateTime(LocalDateTime.now());
             empMapper.insert(emp);
 
-            int i = 1/0;
+
             List<EmpExpr> exprList = emp.getExprList();
             if (!CollectionUtils.isEmpty(exprList)){
 

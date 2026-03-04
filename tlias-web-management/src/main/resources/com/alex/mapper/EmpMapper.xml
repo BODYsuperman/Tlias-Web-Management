@@ -23,6 +23,7 @@
                 and e.entry_date between #{begin} and #{end}
             </if>
         </where>
+        order by update_time desc
     </select>
 
     <resultMap id="empResultMap" type="com.alex.pojo.Emp">

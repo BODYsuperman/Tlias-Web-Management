@@ -10,12 +10,18 @@ import java.util.List;
 @Mapper
 public interface OperateLogMapper {
 
+//    //插入日志数据
+//    @Insert("insert into op (operate_emp_id, operate_time, class_name, method_name, method_params, return_value, cost_time) " +
+//            "values (#{operateEmpId}, #{operateTime}, #{className}, #{methodName}, #{methodParams}, #{returnValue}, #{costTime});")
+//    public void insert(OperateLog log);
+
     //插入日志数据
     @Insert("insert into operate_log (operate_emp_id, operate_time, class_name, method_name, method_params, return_value, cost_time) " +
             "values (#{operateEmpId}, #{operateTime}, #{className}, #{methodName}, #{methodParams}, #{returnValue}, #{costTime});")
-    public void insert(OperateLog log);
+    void insert(OperateLog log);
+
 
     //分页查询日志数据
     @Select("SELECT o.*,e.name AS operateEmpName FROM operate_log o LEFT OUTER JOIN emp e ON o.operate_emp_id = e.id")
-    public List<OperateLog> list();
+    List<OperateLog> list();
 }

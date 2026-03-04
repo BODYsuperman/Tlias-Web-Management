@@ -6,6 +6,7 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.dao.DuplicateKeyException;
 
 import java.sql.SQLException;
 import java.util.regex.Matcher;
@@ -16,14 +17,54 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 处理所有未指定的异常
+    // 1. 捕获主键冲突异常（部门名重复、用户名重复等）
+    @ExceptionHandler(DuplicateKeyException.class)
+    public Result<?> handleDuplicateKeyException(DuplicateKeyException e) {
+        // 使用工具方法提取友好的错误信息
+        String friendlyMessage = extractUserFriendlyMessage(e.getMessage());
+        return Result.error(friendlyMessage);
+    }
+
+    // 2. 捕获参数校验异常（比如部门名称为空）
+    @ExceptionHandler(IllegalArgumentException.class)
+    public Result<?> handleIllegalArgumentException(IllegalArgumentException e) {
+        return Result.error(e.getMessage());
+    }
+
+    // 3. 处理参数校验异常
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Result handleValidationException(MethodArgumentNotValidException e) {
+        String message = e.getBindingResult()
+                .getAllErrors()
+                .stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.joining("；"));
+        return Result.error(message);
+    }
+
+    // 4. 处理 SQL 异常
+    @ExceptionHandler(SQLException.class)
+    public Result handleSQLException(SQLException e) {
+        log.error("数据库异常：", e);
+        return Result.error("数据库操作失败");
+    }
+
+    // 5. 捕获所有其他异常（兜底）
     @ExceptionHandler(Exception.class)
-    public Result handleException(Exception e) {
-        log.error("系统异常：", e);  // 使用日志框架记录
+    public Result<?> handleException(Exception e) {
+        log.error("系统异常：", e);
         return Result.error("系统繁忙，请稍后重试");
     }
 
+    /**
+     * 工具方法：将数据库错误信息转换为用户友好的提示
+     * 注意：这个方法没有 @ExceptionHandler 注解
+     */
     private String extractUserFriendlyMessage(String errorMessage) {
+        if (errorMessage == null) {
+            return "操作失败：数据重复";
+        }
+
         // MySQL 的错误信息格式
         if (errorMessage.contains("Duplicate entry")) {
             // 解析重复的值和索引名
@@ -51,23 +92,5 @@ public class GlobalExceptionHandler {
         }
 
         return "操作失败：数据重复";
-    }
-
-    // 处理参数校验异常
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Result handleValidationException(MethodArgumentNotValidException e) {
-        String message = e.getBindingResult()
-                .getAllErrors()
-                .stream()
-                .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .collect(Collectors.joining("；"));
-        return Result.error(message);
-    }
-
-    // 处理 SQL 异常
-    @ExceptionHandler(SQLException.class)
-    public Result handleSQLException(SQLException e) {
-        log.error("数据库异常：", e);
-        return Result.error("数据库操作失败");
     }
 }
