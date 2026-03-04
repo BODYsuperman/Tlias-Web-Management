@@ -14,9 +14,6 @@ tags:
   - RESTful API
 ---
 1. [Project Overview: What is Tlias?](#1-project-overview-what-is-tlias)
-  - [1.1 What is CSS3?](#what)
-  - [1.2 Core Roles of CSS3](#role)
-  - [1.3 CSS Classification by Location](#classify)
 2. [Environment Setup: The Hardest Part](#2-environment-setup-the-hardest-part)
 3. [Department Management](#3-department-management-first-crud-experience)
 4. [Employee Management: Pagination & Dynamic SQL](#4-employee-management-pagination--dynamic-sql)
