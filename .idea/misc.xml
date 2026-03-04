@@ -5,10 +5,12 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/tlias-web-management/pom.xml" />
+        <option value="$PROJECT_DIR$/tlias-pojo/pom.xml" />
+        <option value="$PROJECT_DIR$/tlias-utils/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="homebrew-17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

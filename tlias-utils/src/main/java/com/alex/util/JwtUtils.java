@@ -1,15 +1,21 @@
 package com.alex.util;
 
-import io.jsonwebtoken.*;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+
+
 import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
 import java.util.Base64;
+import java.util.Date;
 import java.util.Map;
 
-import java.util.Date;
-
-public class JwtUtils {
+public class  JwtUtils {
 
     private static String signKey = "M6KmQH+vy8bGj9zNqLpRwXyT3UaVcBdEfHgIjKpLmNqR";
     private static Long expire = 43200000L;
@@ -70,9 +76,6 @@ public class JwtUtils {
                     .getPayload();
         } catch (ExpiredJwtException e) {
             System.err.println("JWT令牌已过期: " + e.getMessage());
-            return null;
-        } catch (SignatureException e) {
-            System.err.println("JWT签名验证失败: " + e.getMessage());
             return null;
         } catch (MalformedJwtException e) {
             System.err.println("JWT令牌格式错误: " + e.getMessage());
